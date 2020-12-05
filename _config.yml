@@ -8,13 +8,13 @@ subtitle: ''
 description: ''
 keywords:
 author: John Doe
-language: en
+language: zh-CN
 timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
-url: http://example.com
-root: /
+url: https://striving-dev.github.io
+root: /blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -98,9 +98,11 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: fluid
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: git@github.com:striving-dev/blog
+  branch: gh-pages
