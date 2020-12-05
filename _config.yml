@@ -104,5 +104,5 @@ theme: fluid
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  repo: git@github.com:striving-dev/blog
+  # repo: git@github.com:striving-dev/blog
   branch: gh-pages
