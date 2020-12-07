@@ -28,7 +28,7 @@ npm run server
 
 目前需要写的front-matter：
 
-- title: test    标题
+- title: test    标题test
 - date: 2020-12-05 16:48:05   时间
 - author     你的昵称
 
