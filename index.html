@@ -47,7 +47,7 @@
 
 
 <body>
-  <header style="height: 100vh;">
+  <header style="height: 99vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -92,33 +92,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
               <a class="nav-link" href="/blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/blog/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
               </a>
             </li>
           
@@ -141,7 +117,7 @@
 </nav>
 
     <div class="banner intro-2" id="background" parallax=true
-         style="background: url('/blog/img/default.png') no-repeat center center;
+         style="background: url('/blog/assert/background.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -167,7 +143,7 @@
     
       <div class="container nopadding-md">
         <div class="py-5" id="board"
-          style=margin-top:0>
+          >
           
           <div class="container">
             <div class="row">
@@ -181,17 +157,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2020/12/07/hello-world/">Hello World</a>
+        <a href="/blog/2020/12/07/setTimeout%E5%92%8CsetInterval/">setTimeout和setInterval</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2020/12/07/hello-world/">
+        <a href="/blog/2020/12/07/setTimeout%E5%92%8CsetInterval/">
           
           
             
           
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
+          最近接到一个需求，开发一个倒计时组件，渲染后能够自动倒计时直到到达服务器下发的结束时间。纯展示类组件，暂时没有其他交互。
+接到这个需求时，一开始是轻视的，但是在实现和测试阶段发现了很多问题，所以把倒计时相关的知识总结一下。
         </a>
       </p>
 
@@ -199,12 +175,19 @@ Quick
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-07 11:59" pubdate>
+            <time datetime="2020-12-07 13:51" pubdate>
               2020-12-07
             </time>
           </div>
         
         
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/blog/tags/JS%E5%9F%BA%E7%A1%80/">JS基础</a>
+            
+          </div>
         
       </div>
     </article>
@@ -216,16 +199,16 @@ Quick
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2020/12/05/test/">test</a>
+        <a href="/blog/2020/12/05/hello-world/">Hello</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2020/12/05/test/">
+        <a href="/blog/2020/12/05/hello-world/">
           
           
             
           
-          大家好，这是一个test页面
+          大家好
 
         </a>
       </p>
@@ -234,7 +217,7 @@ Quick
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-05 16:48" pubdate>
+            <time datetime="2020-12-05 13:23" pubdate>
               2020-12-05
             </time>
           </div>
