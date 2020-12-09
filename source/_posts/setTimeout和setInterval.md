@@ -3,6 +3,8 @@ title: setTimeout和setInterval
 date: 2020-12-07 13:51:41
 tags: JS基础
 author: 李京阳
+banner_img: assert/setTimeout-setInterval_banner.jpg
+index_img: assert/setTimeout-setInterval_banner.jpg
 ---
 
 最近接到一个需求，开发一个倒计时组件，渲染后能够自动倒计时直到到达服务器下发的结束时间。纯展示类组件，暂时没有其他交互。

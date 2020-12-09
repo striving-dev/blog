@@ -41,11 +41,11 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
-  enable: true
+  enable: false
   line_number: true
   auto_detect: false
   tab_replace: ''
@@ -54,8 +54,14 @@ highlight:
 prismjs:
   enable: false
   preprocess: true
-  line_number: true
+  line_number: false
   tab_replace: ''
+
+prism_plugin:
+  mode: 'preprocess'
+  theme: 'tomorrow'
+  line_number: false
+  custom_css:
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
