@@ -90,7 +90,7 @@ setTimeout(function tick() {
 }, 100)
 ```
 
-![setTimeout setInterval](http://cdn.ljybill.com/uPic/setTimeout%20setInterval.png)
+![setTimeout setInterval](https://cdn.ljybill.com/uPic/setTimeout%20setInterval.png)
 
 这个图能够直观表现两者的差异，**在`setInterval`中，两个函数之间的实际间隔是小于100毫秒的**，这是因为，`func`代码执行的时间“占用”掉了一部分间隔时间。
 
