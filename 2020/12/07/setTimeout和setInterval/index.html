@@ -241,7 +241,7 @@
 <p>那么，这两种方式的区别是什么呢？</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-built_in">setInterval</span>(func, <span class="hljs-number">100</span>)<br><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>  func();<br>  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">100</span>);<br>&#125;, <span class="hljs-number">100</span>)<br></code></pre></td></tr></table></figure>
 
-<p><img src="http://cdn.ljybill.com/uPic/setTimeout%20setInterval.png" srcset="/blog/img/loading.gif" alt="setTimeout setInterval"></p>
+<p><img src="https://cdn.ljybill.com/uPic/setTimeout%20setInterval.png" srcset="/blog/img/loading.gif" alt="setTimeout setInterval"></p>
 <p>这个图能够直观表现两者的差异，<strong>在<code>setInterval</code>中，两个函数之间的实际间隔是小于100毫秒的</strong>，这是因为，<code>func</code>代码执行的时间“占用”掉了一部分间隔时间。</p>
 <p>如果<code>func</code>执行时间过长（比如在这个例子中超过了100ms），那么当func执行完毕后，调度器会立即执行下一个<code>func</code>代码，这样就会无休止的执行下去。</p>
 <p>如上图，<strong>Nested setTimeout就能够保证一个固定的时间</strong>，这是因为我们会在一个<code>func</code>的最后去生成一个新的定时器。</p>
