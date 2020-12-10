@@ -29,7 +29,7 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github.min.css" />
     
   
 
@@ -59,7 +59,7 @@
   </script>
   <script  src="/blog/js/utils.js" ></script>
   <script  src="/blog/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 5.2.0"></head>
 
 
 <body>
@@ -165,7 +165,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      1.2k 字
     </span>
   
 
@@ -175,7 +175,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      21
+      17
        分钟
     </span>
   
@@ -237,26 +237,70 @@
 <p>更多的参数，传递给参数1（参数1是一个函数）中的参数。IE9及以下不支持此参数</p>
 </li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre class=" language-hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>&#123;<br>  alert(<span class="hljs-string">&#x27;Hello&#x27;</span>);<br>&#125;<br><br><span class="hljs-built_in">setTimeout</span>(sayHi, <span class="hljs-number">1000</span>);<br><br><span class="hljs-comment">// 参数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi2</span>(<span class="hljs-params">name</span>) </span>&#123;<br>  alert(<span class="hljs-string">`hello, <span class="hljs-subst">$&#123;name&#125;</span>`</span>);<br>&#125;<br><br><span class="hljs-built_in">setTimeout</span>(sayHi2, <span class="hljs-number">1000</span>, <span class="hljs-string">&#x27;John&#x27;</span>);<br><br><span class="hljs-comment">// 字符串参数</span><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-string">&quot;alert(&#x27;Hello&#x27;)&quot;</span>, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// 不推荐</span><br><br><span class="hljs-comment">// 清除timeout</span><br><span class="hljs-keyword">const</span> timerId = <span class="hljs-built_in">setTimeout</span>(sayH1, <span class="hljs-number">1000</span>);<br><span class="hljs-keyword">const</span> oldTimerId = timerId;<br><span class="hljs-built_in">clearTimeout</span>(timerId);<br>oldTimerId === timerId <span class="hljs-comment"><code class="language-hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>&#123;<br>  alert(<span class="hljs-string">&#x27;Hello&#x27;</span>);<br>&#125;<br><br><span class="hljs-built_in">setTimeout</span>(sayHi, <span class="hljs-number">1000</span>);<br><br><span class="hljs-comment">// 参数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi2</span>(<span class="hljs-params">name</span>) </span>&#123;<br>  alert(<span class="hljs-string">`hello, <span class="hljs-subst">$&#123;name&#125;</span>`</span>);<br>&#125;<br><br><span class="hljs-built_in">setTimeout</span>(sayHi2, <span class="hljs-number">1000</span>, <span class="hljs-string">&#x27;John&#x27;</span>);<br><br><span class="hljs-comment">// 字符串参数</span><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-string">&quot;alert(&#x27;Hello&#x27;)&quot;</span>, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// 不推荐</span><br><br><span class="hljs-comment">// 清除timeout</span><br><span class="hljs-keyword">const</span> timerId = <span class="hljs-built_in">setTimeout</span>(sayH1, <span class="hljs-number">1000</span>);<br><span class="hljs-keyword">const</span> oldTimerId = timerId;<br><span class="hljs-built_in">clearTimeout</span>(timerId);<br>oldTimerId === timerId <span class="hljs-comment">// true</span><br></code></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>&#123;
+  alert(<span class="hljs-string">&#x27;Hello&#x27;</span>);
+&#125;
+
+<span class="hljs-built_in">setTimeout</span>(sayHi, <span class="hljs-number">1000</span>);
+
+<span class="hljs-comment">// 参数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi2</span>(<span class="hljs-params">name</span>) </span>&#123;
+  alert(<span class="hljs-string">`hello, <span class="hljs-subst">$&#123;name&#125;</span>`</span>);
+&#125;
+
+<span class="hljs-built_in">setTimeout</span>(sayHi2, <span class="hljs-number">1000</span>, <span class="hljs-string">&#x27;John&#x27;</span>);
+
+<span class="hljs-comment">// 字符串参数</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-string">&quot;alert(&#x27;Hello&#x27;)&quot;</span>, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// 不推荐</span>
+
+<span class="hljs-comment">// 清除timeout</span>
+<span class="hljs-keyword">const</span> timerId = <span class="hljs-built_in">setTimeout</span>(sayH1, <span class="hljs-number">1000</span>);
+<span class="hljs-keyword">const</span> oldTimerId = timerId;
+<span class="hljs-built_in">clearTimeout</span>(timerId);
+oldTimerId === timerId <span class="hljs-comment">// true</span></code></pre></div>
 
 <h3 id="setInterval"><a href="#setInterval" class="headerlink" title="setInterval"></a>setInterval</h3><p><code>const timerId = setInterval(func | code, [delay], [arg1], [arg2], ...)</code></p>
 <p>使用方式和<code>setTimeout()</code>差不多，不同的地方就是<code>setInterval()</code>方法创建的异步任务会无休止的执行下去，除非主动调用<code>clearInterval()</code></p>
 <h2 id="Nested-setTimeout"><a href="#Nested-setTimeout" class="headerlink" title="Nested setTimeout"></a>Nested setTimeout</h2><p>综上，如果我们想要实现以一定频率反复执行一段代码，我们可以使用<code>setInterval</code>来实现。除此之外，我们还有另一个选择：嵌套执行<code>setTimeout</code>：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class=" language-hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;tick&#x27;</span>);<br>  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// nested call</span><br>&#125;<br><span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number"><code class="language-hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;tick&#x27;</span>);<br>  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// nested call</span><br>&#125;<br><span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">1000</span>)<br></code></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;tick&#x27;</span>);
+  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// nested call</span>
+&#125;
+<span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">1000</span>)</code></pre></div>
 
 <p>那么，这两种方式的区别是什么呢？</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre class=" language-hljs javascript"><span class="hljs-built_in">setInterval</span>(func, <span class="hljs-number">100</span>)<br><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>  func();<br>  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">100</span>);<br>&#125;, <span class="hljs-number"><code class="language-hljs javascript"><span class="hljs-built_in">setInterval</span>(func, <span class="hljs-number">100</span>)<br><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>  func();<br>  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">100</span>);<br>&#125;, <span class="hljs-number">100</span>)<br></code></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-built_in">setInterval</span>(func, <span class="hljs-number">100</span>)
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;
+  func();
+  <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">100</span>);
+&#125;, <span class="hljs-number">100</span>)</code></pre></div>
 
 <p><img src="https://cdn.ljybill.com/uPic/setTimeout%20setInterval.png" srcset="/blog/img/loading.gif" alt="setTimeout setInterval"></p>
 <p>这个图能够直观表现两者的差异，<strong>在<code>setInterval</code>中，两个函数之间的实际间隔是小于100毫秒的</strong>，这是因为，<code>func</code>代码执行的时间“占用”掉了一部分间隔时间。</p>
 <p>如果<code>func</code>执行时间过长（比如在这个例子中超过了100ms），那么当func执行完毕后，调度器会立即执行下一个<code>func</code>代码，这样就会无休止的执行下去。</p>
 <p>如上图，<strong>Nested setTimeout就能够保证一个固定的时间</strong>，这是因为我们会在一个<code>func</code>的最后去生成一个新的定时器。</p>
 <h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>嵌套调用setTimeout的优势就在于能够灵活地调整延迟时间来达到更“丝滑”的效果，下面就看下升级版的“Nested setTimeout”</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre class=" language-hljs javascript"><span class="hljs-keyword">const</span> delay = <span class="hljs-number">1000</span>;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">const</span> startTime = <span class="hljs-built_in">Date</span>.now();<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-comment">// do something</span><br>    <br>    count++;<br>    <span class="hljs-keyword">const</span> offset = <span class="hljs-built_in">Date</span>.now() - (startTime + count * delay)<br>    <span class="hljs-built_in"><code class="language-hljs javascript"><span class="hljs-keyword">const</span> delay = <span class="hljs-number">1000</span>;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">const</span> startTime = <span class="hljs-built_in">Date</span>.now();<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-comment">// do something</span><br>    <br>    count++;<br>    <span class="hljs-keyword">const</span> offset = <span class="hljs-built_in">Date</span>.now() - (startTime + count * delay)<br>    <span class="hljs-built_in">setTimeout</span>(tick, delay - offset)<br>  &#125;, delay)<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> delay = <span class="hljs-number">1000</span>;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> startTime = <span class="hljs-built_in">Date</span>.now();
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>&#123;
+    <span class="hljs-comment">// do something</span>
+    
+    count++;
+    <span class="hljs-keyword">const</span> offset = <span class="hljs-built_in">Date</span>.now() - (startTime + count * delay)
+    <span class="hljs-built_in">setTimeout</span>(tick, delay - offset)
+  &#125;, delay)
+&#125;</code></pre></div>
 
 <h2 id="关于垃圾回收"><a href="#关于垃圾回收" class="headerlink" title="关于垃圾回收"></a>关于垃圾回收</h2><p>我们平时在写定时器的时候，一定会听过这样一句话：“一定要记得及时调用<code>clearTimeout/Interval</code>清除定时器”。那么为什么要及时清定时器，清的到底是什么？下面讲下关于<code>setTimeout</code>和<code>setInterval</code>的垃圾回收机制。</p>
 <p>当我们给<code>setTimeout</code>/<code>setInterval</code>传递函数时，引擎会创建一个内部的引用，并在调度器（scheduler）中存起来，以防被垃圾回收所收集，哪怕外部并没有其他的引用。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre class=" language-hljs javascript"><span class="hljs-comment">// 这个函数会被保留到内存中，直到函数被调用了，也就是说函数调用之后，垃圾回收就能够回收此函数了</span><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number">100</span>);<br><br><span class="hljs-comment">// 这个函数会被保留到内存中，直到执行了clearInterval</span><br><span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number"><code class="language-hljs javascript"><span class="hljs-comment">// 这个函数会被保留到内存中，直到函数被调用了，也就是说函数调用之后，垃圾回收就能够回收此函数了</span><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number">100</span>);<br><br><span class="hljs-comment">// 这个函数会被保留到内存中，直到执行了clearInterval</span><br><span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number">100</span>);<br></code></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">// 这个函数会被保留到内存中，直到函数被调用了，也就是说函数调用之后，垃圾回收就能够回收此函数了</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number">100</span>);
+
+<span class="hljs-comment">// 这个函数会被保留到内存中，直到执行了clearInterval</span>
+<span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;...&#125;, <span class="hljs-number">100</span>);</code></pre></div>
 
 <p>这里有个副作用，如果<code>function</code>中使用依赖了外部的词法环境（俗称闭包），那么这些外部的变量也会被保留到内存中。<strong>外部变量消耗的内存很可能比<code>function</code>本身消耗的内存多</strong>，这也是为什么我们常说清除定时器。</p>
 <h2 id="为什么我的定时器会很慢"><a href="#为什么我的定时器会很慢" class="headerlink" title="为什么我的定时器会很慢"></a>为什么我的定时器会很慢</h2><p>请注意，不管是setTimeout还是setInterval都不保证精确的delay时间，并且在某些情况下，差距会很大，比如：</p>
