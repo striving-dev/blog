@@ -46,7 +46,7 @@ relative_link: false
 future: true
 highlight:
   enable: false
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -56,12 +56,6 @@ prismjs:
   preprocess: true
   line_number: false
   tab_replace: ''
-
-prism_plugin:
-  mode: 'preprocess'
-  theme: 'tomorrow'
-  line_number: false
-  custom_css:
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
