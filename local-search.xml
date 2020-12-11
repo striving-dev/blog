@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>TS中不识别自己封装的类型判断</title>
+    <link href="/blog/2020/12/11/TS%E4%B8%AD%E4%B8%8D%E8%AF%86%E5%88%AB%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD/"/>
+    <url>/blog/2020/12/11/TS%E4%B8%AD%E4%B8%8D%E8%AF%86%E5%88%AB%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD/</url>
+    
+    <content type="html"><![CDATA[<p>在大型项目中我们更愿意使用<code>ts</code>取代<code>js</code>，其中一个主要原因是<code>ts</code>能够进行静态类型检查，提高代码质量。</p><a id="more"></a><p>比如当我们对一个对象进行<code>push</code>操作时，<code>ts</code>会先判断当前对象是否是一个数组。就像这样：</p><p><img src="https://cdn.ljybill.com/uPic/image-20201211141434434.png" alt="image-20201211141434434"></p><p>这样能够比较安全的操作一些参数，然而我们可能进行一些类型校验的封装，比如下面的代码：</p><pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isArray</span>(<span class="hljs-params">arr</span>): <span class="hljs-title">boolean</span> </span>&#123;    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray(arr);&#125;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isFunction</span>(<span class="hljs-params">fn: <span class="hljs-built_in">any</span></span>): <span class="hljs-title">boolean</span> </span>&#123;    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">&#x27;function&#x27;</span>;&#125;</code></pre><p>然而，如果这样封装之后，<code>ts</code>并不买账你的类型判断：</p><p><img src="https://cdn.ljybill.com/uPic/image-20201211141925858.png" alt="image-20201211141925858"></p><p>这种情况下怎么办呢？</p><hr><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>有两种解决方案：</p><ol><li>一种是强行断言</li></ol><pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">arg: <span class="hljs-built_in">Array</span>&lt;<span class="hljs-built_in">number</span>&gt; | <span class="hljs-literal">undefined</span></span>) </span>&#123;    arg.push(<span class="hljs-number">1</span>);    <span class="hljs-keyword">if</span> (isArray(arg)) &#123;        (arg <span class="hljs-keyword">as</span> <span class="hljs-built_in">Array</span>&lt;<span class="hljs-built_in">number</span>&gt;).push(<span class="hljs-number">1</span>);    &#125;    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(arg)) &#123;        arg.push(<span class="hljs-number">1</span>);    &#125;&#125;</code></pre><p>这并不是一种优雅的选择。</p><ol start="2"><li><strong>修改<code>isFunction</code>等判断类型函数的返回值</strong></li></ol><pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isArray</span>(<span class="hljs-params">arr</span>): <span class="hljs-title">arr</span> <span class="hljs-title">is</span> <span class="hljs-title">Array</span>&lt;<span class="hljs-title">any</span>&gt; </span>&#123;    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray(arr);&#125;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isFunction</span>(<span class="hljs-params">fn: <span class="hljs-built_in">any</span></span>): <span class="hljs-title">fn</span> <span class="hljs-title">is</span> <span class="hljs-title">Function</span> </span>&#123;    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">&#x27;function&#x27;</span>;&#125;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">arg: <span class="hljs-built_in">Array</span>&lt;<span class="hljs-built_in">number</span>&gt; | <span class="hljs-literal">undefined</span></span>) </span>&#123;    arg.push(<span class="hljs-number">1</span>);         <span class="hljs-comment">// TS2532: Object is possibly &#x27;undefined&#x27;.</span>    <span class="hljs-keyword">if</span> (isArray(arg)) &#123;        arg.push(<span class="hljs-number">1</span>);    &#125;    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(arg)) &#123;        arg.push(<span class="hljs-number">1</span>);    &#125;&#125;</code></pre><p>至此，问题解决。</p><h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>但是ts默认是不校验<code>null</code>和<code>undefined</code>的。除非我们修改<code>ts.config.json</code>中的<code>strictNullChecks</code>字段。<code>&quot;strictNullChecks&quot;: true</code>。建议开启此配置项，能够进一步提高代码的严谨性。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>踩坑记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>setTimeout和setInterval</title>
     <link href="/blog/2020/12/07/setTimeout%E5%92%8CsetInterval/"/>
     <url>/blog/2020/12/07/setTimeout%E5%92%8CsetInterval/</url>
