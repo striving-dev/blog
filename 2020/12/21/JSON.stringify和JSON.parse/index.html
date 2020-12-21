@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assert/favicon.ico">
+  <link rel="icon" type="image/png" href="/blog/assert/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="simple">
+  <meta name="keywords" content="">
+  <title>JSON.stringify和JSON.parse - 前端进击小组</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/blog/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"striving-dev.github.io","root":"/blog/","version":"1.8.6","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 60vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/blog/">&nbsp;<strong>前端进击小组</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="JSON.stringify和JSON.parse">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      simple
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-21 10:34" pubdate>
+        2020年12月21日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      41
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JSON.stringify和JSON.parse</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4><p>JSON的全称是<code>JavaScript Object Notation</code>，意思是JavaScript对象表示法，它是一种基于文本，独立于语言的轻量级数据交换格式</p>
+<h5 id="JSON-格式"><a href="#JSON-格式" class="headerlink" title="JSON 格式"></a>JSON 格式</h5><p>JSON 有两种表示法， 对象和数组，两种表示法可以相互嵌套组合， 和 JavaScript 中的语法基本一致， 但有一些必须遵守的格式</p>
+<ul>
+<li>关键字必须是字符串， 值可以是字符串、 数值、 Boolean、null、 对象或数组</li>
+<li>字符串必须用双引号括起来</li>
+<li>JSON 中不可以有注释</li>
+</ul>
+<p>javaScript 中提供了两个处理 JSON 的方法， 分别是</p>
+<p><code>JSON.stringify</code>: 将对象处理成 JSON字符串</p>
+<p><code>JSON.parse</code>: 将 JSON 字符串转化成对象</p>
+<p>这两个方法平时开发中使用率还是很高的， 比如将对象转为字符串存入 <code>storage</code>,  或者深度复制一个对象</p>
+<p>通常用法如下</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> xiaoming = &#123;
+    name: <span class="hljs-string">&#x27;小明&#x27;</span>,
+    age: <span class="hljs-number">14</span>,
+    skills: [<span class="hljs-string">&#x27;JavaScript&#x27;</span>, <span class="hljs-string">&#x27;Java&#x27;</span>, <span class="hljs-string">&#x27;Python&#x27;</span>, <span class="hljs-string">&#x27;Lisp&#x27;</span>]
+&#125;;
+<span class="hljs-keyword">const</span> s = <span class="hljs-built_in">JSON</span>.stringify(xiaoming);
+<span class="hljs-built_in">console</span>.log(s)
+<span class="hljs-comment">// &#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;skills&quot;:[&quot;JavaScript&quot;,&quot;Java&quot;,&quot;Python&quot;,&quot;Lisp&quot;]&#125;&#x27;</span>
+<span class="hljs-keyword">const</span> so = <span class="hljs-built_in">JSON</span>.parse(s);
+<span class="hljs-built_in">console</span>.log(so);
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">&#123;</span>
+<span class="hljs-comment">    name: &#x27;小明&#x27;,</span>
+<span class="hljs-comment">    age: 14,</span>
+<span class="hljs-comment">    skills: [&#x27;JavaScript&#x27;, &#x27;Java&#x27;, &#x27;Python&#x27;, &#x27;Lisp&#x27;]</span>
+<span class="hljs-comment">&#125;</span>
+<span class="hljs-comment">*/</span></code></pre></div>
+
+<p>但是这两个方法并非这么简单， 我们平时使用过程中很容易忽略了它的高级用法， 我们一个一个的看</p>
+<h4 id="JSON-stringify"><a href="#JSON-stringify" class="headerlink" title="JSON.stringify"></a>JSON.stringify</h4><p>先开看看它的语法</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-built_in">JSON</span>.stringify(value[, replacer [, space]])</code></pre></div>
+
+<p>是的， 你没看错，是不是很惊讶， 它居然有三个参数，如果你知道这个知识点， 那么你可以不用往下看了， 你很棒！</p>
+<p>那么我们看看这三个参数到底是干什么， 它到底有何神通？</p>
+<ul>
+<li>value: 这个我们一直在用， 没什么可介绍的， 它就是我们要转化成 JSON 字符串的对象</li>
+<li>replacer: 可选值， 函数或者数组， 用于序列化过程中， 处理每个属性</li>
+<li>space: 可选值 字符串或者数字， 用于美化输出</li>
+</ul>
+<p>光看文字说明可能不大容易理解， 我们举几个🌰</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">// 我们的目标对象</span>
+<span class="hljs-keyword">const</span> xiaoming = &#123;
+    name: <span class="hljs-string">&#x27;小明&#x27;</span>,
+    age: <span class="hljs-number">14</span>,
+    skills: [<span class="hljs-string">&#x27;JavaScript&#x27;</span>, <span class="hljs-string">&#x27;Java&#x27;</span>, <span class="hljs-string">&#x27;Python&#x27;</span>, <span class="hljs-string">&#x27;Lisp&#x27;</span>],
+	  friends: [&#123;<span class="hljs-attr">names</span>: <span class="hljs-string">&#x27;xiaohong&#x27;</span>&#125;]
+&#125;;</code></pre></div>
+
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">// 第二个参数是数组</span>
+<span class="hljs-keyword">const</span> temp1 = <span class="hljs-built_in">JSON</span>.stringify(xiaoming, [<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>, <span class="hljs-string">&#x27;friends&#x27;</span>]);
+<span class="hljs-built_in">console</span>.log(temp1);
+<span class="hljs-comment">// &#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;friends&quot;:[&#123;&#125;]&#125;&#x27;</span></code></pre></div>
+
+<p>发现了什么， 得到的 JSON 字符串 temp1 的属性值是经过第二个参数数组过滤后的， 而且第二数组的属性平铺的， 不考虑目标对象的深度，如果第二个参数是<code> [&#39;name&#39;, &#39;age&#39;, &#39;friends&#39;, &#39;names&#39;]</code>, 那么最终得到的值就是 <code>&#39;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;friends&quot;:[&#123;&quot;names&quot;: &quot;xiaohong&quot;&#125;]&#125;&#39;</code></p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">// 第二个参数是函数</span>
+<span class="hljs-keyword">const</span> temp2 = <span class="hljs-built_in">JSON</span>.stringify(xiaoming, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">k, v</span>) </span>&#123; <span class="hljs-built_in">console</span>.log(k, v); <span class="hljs-keyword">return</span> v; &#125;);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;---------------------------------------分割线&#x27;</span>)
+<span class="hljs-built_in">console</span>.log(temp2);
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment">&quot;&quot; &#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;skills&quot;:[&quot;JavaScript&quot;,&quot;Java&quot;,&quot;Python&quot;,&quot;Lisp&quot;],&quot;friends&quot;:[&#123;&quot;names&quot;:&quot;xiaohong&quot;&#125;]&#125;&#x27;</span>
+<span class="hljs-comment">name 小明</span>
+<span class="hljs-comment">age 14</span>
+<span class="hljs-comment">skills [&quot;JavaScript&quot;, &quot;Java&quot;, &quot;Python&quot;, &quot;Lisp&quot;]</span>
+<span class="hljs-comment">0 JavaScript</span>
+<span class="hljs-comment">1 Java</span>
+<span class="hljs-comment">2 Python</span>
+<span class="hljs-comment">3 Lisp</span>
+<span class="hljs-comment">friends [&#123;names: &quot;xiaohong&quot;&#125;]</span>
+<span class="hljs-comment">0 &#123;names: &quot;xiaohong&quot;&#125;</span>
+<span class="hljs-comment">names xiaohong</span>
+<span class="hljs-comment">---------------------------------------分割线</span>
+<span class="hljs-comment">&#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;skills&quot;:[&quot;JavaScript&quot;,&quot;Java&quot;,&quot;Python&quot;,&quot;Lisp&quot;],&quot;friends&quot;:[&#123;&quot;names&quot;:&quot;xiaohong&quot;&#125;]&#125;&#x27;</span>
+<span class="hljs-comment">*/</span></code></pre></div>
+
+<p>分割线以上即第二个参数打印出来的， 对象的每个属性都会递归的去调用这个函数， 函数有两个参数， 第一个参数是 k, 代表对象的属性， 第二参数是 v，代表相应的属性值， 通过这个函数， 我们就可以对每个属性进行操作、过滤等。</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-comment">// 第三个参数是 字符串</span>
+<span class="hljs-keyword">const</span> temp3 = <span class="hljs-built_in">JSON</span>.stringify(xiaoming, <span class="hljs-literal">null</span>, <span class="hljs-string">&#x27;aaaa&#x27;</span>);
+<span class="hljs-built_in">console</span>.log(temp3);
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment">&quot;&#123;</span>
+<span class="hljs-comment">aaaa&quot;name&quot;: &quot;小明&quot;,</span>
+<span class="hljs-comment">aaaa&quot;age&quot;: 14,</span>
+<span class="hljs-comment">aaaa&quot;skills&quot;: [</span>
+<span class="hljs-comment">aaaaaaaa&quot;JavaScript&quot;,</span>
+<span class="hljs-comment">aaaaaaaa&quot;Java&quot;,</span>
+<span class="hljs-comment">aaaaaaaa&quot;Python&quot;,</span>
+<span class="hljs-comment">aaaaaaaa&quot;Lisp&quot;</span>
+<span class="hljs-comment">aaaa],</span>
+<span class="hljs-comment">aaaa&quot;friends&quot;: [</span>
+<span class="hljs-comment">aaaaaaaa&#123;</span>
+<span class="hljs-comment">aaaaaaaaaaaa&quot;names&quot;: &quot;xiaohong&quot;</span>
+<span class="hljs-comment">aaaaaaaa&#125;</span>
+<span class="hljs-comment">aaaa]</span>
+<span class="hljs-comment">&#125;&quot;</span>
+<span class="hljs-comment">*/</span>
+
+<span class="hljs-comment">// 第三个参数是 数字</span>
+<span class="hljs-keyword">const</span> temp4 = <span class="hljs-built_in">JSON</span>.stringify(xiaoming, <span class="hljs-literal">null</span>, <span class="hljs-number">4</span>);
+<span class="hljs-built_in">console</span>.log(temp4);
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment">&quot;&#123;</span>
+<span class="hljs-comment">    &quot;name&quot;: &quot;小明&quot;,</span>
+<span class="hljs-comment">    &quot;age&quot;: 14,</span>
+<span class="hljs-comment">    &quot;skills&quot;: [</span>
+<span class="hljs-comment">        &quot;JavaScript&quot;,</span>
+<span class="hljs-comment">        &quot;Java&quot;,</span>
+<span class="hljs-comment">        &quot;Python&quot;,</span>
+<span class="hljs-comment">        &quot;Lisp&quot;</span>
+<span class="hljs-comment">    ],</span>
+<span class="hljs-comment">    &quot;friends&quot;: [</span>
+<span class="hljs-comment">        &#123;</span>
+<span class="hljs-comment">            &quot;names&quot;: &quot;xiaohong&quot;</span>
+<span class="hljs-comment">        &#125;</span>
+<span class="hljs-comment">    ]</span>
+<span class="hljs-comment">&#125;&quot;</span>
+<span class="hljs-comment">*/</span></code></pre></div>
+
+<p><code>JSON.stringify</code> 的第三个参数用于美化输出， 如果是字符串， 那么缩进的地方都会被字符串填满， 如 temp3 打印的那样。 如果是数字（num）， 那么缩进的地方都会被 num 个空格填满。</p>
+<p><code>JSON.stringify</code> 的三个参数都介绍完了， 再介绍几个需要注意地方</p>
+<ol>
+<li><p><code>JSON.stringify</code> 不仅可以处理对象， 也可以处理其他类型</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-literal">true</span>);                      <span class="hljs-comment">// &quot;true&quot;</span>
+<span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-string">&quot;foo&quot;</span>);                     <span class="hljs-comment">// &quot;&quot;foo&quot;&quot;</span>
+<span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-number">1</span>);                         <span class="hljs-comment">// &quot;1&quot;</span>
+<span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-literal">null</span>);                      <span class="hljs-comment">// &quot;null&quot;</span></code></pre></div>
+</li>
+<li><p>某些特定于 JavaScript 的对象属性会被 <code>JSON.stringify</code> 跳过</p>
+<ul>
+<li>函数属性（方法）</li>
+<li>Symbol 类型的属性</li>
+<li>存储 undefined 的属性</li>
+<li>不可枚举的属性</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> user = &#123;
+  <span class="hljs-function"><span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>)</span> &#123; <span class="hljs-comment">// 被忽略</span>
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  &#125;,
+  [<span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>)]: <span class="hljs-number">123</span>, <span class="hljs-comment">// 被忽略</span>
+  something: <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// 被忽略</span>
+  ...Object.create(
+        <span class="hljs-literal">null</span>, 
+        &#123; 
+            x: &#123; <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span> &#125; <span class="hljs-comment">// 被忽略</span>
+        &#125;
+    )
+&#125;;
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(user)); <span class="hljs-comment">// &#123;&#125;</span></code></pre></div>
+</li>
+<li><p><code>JSON.stringify</code>第二个参数<code>replacer</code>如果是函数的话， 会根据对象的键值对递归的去调用， 但是第一个调用很特别，  <code>(key, value)</code> 对的键是空的， 并且该值是整个目标对象。 这个理念是为了给 <code>replacer</code> 提供尽可能多的功能： 如果有必要， 它有机会分析并替换、跳过整个对象</p>
+</li>
+<li><p><code>JSON.stringify</code> 转换的对象中不可以有循环引用</p>
+</li>
+</ol>
+<h5 id="toJSON-方法"><a href="#toJSON-方法" class="headerlink" title="toJSON 方法"></a>toJSON 方法</h5><p>像<code>toStirng</code>进行字符串转换， 对象也可以提供 <code>toJSON</code> 方法来进行 JSON 转换。如果可用，<code>JSON.stringify</code> 会自动调用它</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> meetup = &#123;
+  title: <span class="hljs-string">&quot;Conference&quot;</span>,
+  date: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-built_in">Date</span>.UTC(<span class="hljs-number">2020</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)),
+&#125;;
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">  &#123;</span>
+<span class="hljs-comment">    &quot;title&quot;:&quot;Conference&quot;,</span>
+<span class="hljs-comment">    &quot;date&quot;:&quot;2020-01-01T00:00:00.000Z&quot;,  // (1)</span>
+<span class="hljs-comment">  &#125;</span>
+<span class="hljs-comment">*/</span></code></pre></div>
+
+<p>在这儿我们可以看到 <code>date</code>  变成了一个字符串。这是因为所有日期都有一个内置的 <code>toJSON</code> 方法来返回这种类型的字符串</p>
+<p>我们也可以为对象 xiaoming 添加一个自定义的 <code>toJSON</code>, (xiaoming 今天的出场率有点高呀， ^_^)</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> xiaoming = &#123;
+    name: <span class="hljs-string">&#x27;小明&#x27;</span>,
+    age: <span class="hljs-number">14</span>,
+    skills: [<span class="hljs-string">&#x27;JavaScript&#x27;</span>, <span class="hljs-string">&#x27;Java&#x27;</span>, <span class="hljs-string">&#x27;Python&#x27;</span>, <span class="hljs-string">&#x27;Lisp&#x27;</span>],
+    <span class="hljs-function"><span class="hljs-title">toJSON</span>(<span class="hljs-params"></span>)</span> &#123;
+      <span class="hljs-keyword">return</span> &#123;
+        ...this,
+        hobby: <span class="hljs-string">&#x27;读书&#x27;</span>
+      &#125;;
+    &#125;
+&#125;;
+alert(<span class="hljs-built_in">JSON</span>.stringify(xiaoming));
+<span class="hljs-comment">// &#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;skills&quot;:[&quot;JavaScript&quot;,&quot;Java&quot;,&quot;Python&quot;,&quot;Lisp&quot;],&quot;hobby&quot;:&quot;读书&quot;&#125;&#x27;</span></code></pre></div>
+
+<p>这样， 在返回的字符串中 xiaoming 就会多一个 <code>hobby: &#39;读书&#39;</code></p>
+<h4 id="JSON-parse"><a href="#JSON-parse" class="headerlink" title="JSON.parse"></a>JSON.parse</h4><p>要解码 JSON 字符串， 我们需要另一个方法 <code>JSON.parse</code></p>
+<p>语法</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-built_in">JSON</span>.parse(str, [reviver]);</code></pre></div>
+
+<ul>
+<li><p>str</p>
+<p>要解析的 JSON 字符串。</p>
+</li>
+<li><p>reviver</p>
+<p>可选的函数 function(key,value)，该函数将为每个 <code>(key, value)</code> 对调用，并可以对值进行转换。</p>
+</li>
+</ul>
+<p>基本用法如下</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> xiaoming = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:14,&quot;friends&quot;:[&#123;&quot;names&quot;:&quot;xiaohong&quot;&#125;]&#125;&#x27;</span>;
+xiaoming = <span class="hljs-built_in">JSON</span>.parse(xiaoming);
+alert(xiaoming.name);</code></pre></div>
+
+
+
+<h5 id="使用-reviver"><a href="#使用-reviver" class="headerlink" title="使用 reviver"></a>使用 reviver</h5><p>假如我们拿到一个字符串， 他是这样的</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&#123;&quot;title&quot;:&quot;Conference&quot;,&quot;date&quot;:&quot;2020-11-30T12:00:00.000Z&quot;&#125;&#x27;</span>;</code></pre></div>
+
+<p>现在我们需要对它进行反序列， 把它转换回 JavaScript 对象。</p>
+<p>那么我们可以使用 <code>JSON.parse</code> 来完成</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&#123;&quot;title&quot;:&quot;Conference&quot;,&quot;date&quot;:&quot;2020-11-30T12:00:00.000Z&quot;&#125;&#x27;</span>;
+<span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">JSON</span>.parse(str);
+alert(obj.date.getDate()); <span class="hljs-comment">// Error: obj.date.getDate is not a function</span></code></pre></div>
+
+<p>报错了， 转换以后的 date 字段是个字符串， 而不是 Date 对象。 那么我们要怎么做呢？</p>
+<p>这是 <code>JSON.parse</code> 第二个参数 reviver 就派上用场了， 我们可以这么处理。</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&#123;&quot;title&quot;:&quot;Conference&quot;,&quot;date&quot;:&quot;2020-11-30T12:00:00.000Z&quot;&#125;&#x27;</span>;
+<span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">JSON</span>.parse(str, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">k, v</span>) </span>&#123;
+  <span class="hljs-keyword">if</span> (k === <span class="hljs-string">&#x27;date&#x27;</span>) &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(v);
+  &#125;
+  <span class="hljs-keyword">return</span> v;
+&#125;);
+alert(obj.date.getDate()); <span class="hljs-comment">// 30 </span></code></pre></div>
+
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><ul>
+<li><code>JSON.parse</code> 转换的字符串必须符合 JSON 格式， 否则会报错</li>
+</ul>
+<p><code>JSON.stringify</code> 和 <code>JSON.parse</code> 的用法就介绍完了， 那它们有什么用呢？ 举几个工作中用到的例子吧。</p>
+<ol>
+<li><p>将属性值中可以转成数字的字符串转成数字</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-built_in">JSON</span>.stringify(
+  obj, <span class="hljs-comment">// 要转化的对象</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">replacer</span>(<span class="hljs-params">key, value</span>) </span>&#123; <span class="hljs-comment">// 转换函数</span>
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">isNaN</span>(value)) &#123; <span class="hljs-comment">// 判断是否可以转成数字</span>
+      <span class="hljs-keyword">return</span> +value; <span class="hljs-comment">// 那么返回转成数字的值</span>
+    &#125;
+    <span class="hljs-keyword">return</span> value; <span class="hljs-comment">// 否则返回原值</span>
+  &#125;,
+  <span class="hljs-number">4</span>
+);</code></pre></div>
+</li>
+<li><p>利用 <code>toJSON</code> 返回自己想要的对象， 属性顺序按自己的意愿排列</p>
+<div class="code-wrapper"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> obj = &#123;
+  a: <span class="hljs-string">&#x27;1&#x27;</span>,
+  b: <span class="hljs-string">&#x27;2&#x27;</span>,
+  c: <span class="hljs-string">&#x27;3&#x27;</span>
+&#125;
+<span class="hljs-built_in">Object</span>.defineProperty(obj, <span class="hljs-string">&quot;toJSON&quot;</span>, &#123;
+  value: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
+    <span class="hljs-keyword">return</span> &#123;
+      c: <span class="hljs-built_in">this</span>.c,
+      b: <span class="hljs-built_in">this</span>.b,
+      a: <span class="hljs-built_in">this</span>.a
+    &#125;;
+  &#125;,
+  configurable: <span class="hljs-literal">false</span>,
+  enumerable: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 不可枚举</span>
+  writable: <span class="hljs-literal">false</span>
+&#125;);
+
+<span class="hljs-built_in">JSON</span>.stringify(obj, <span class="hljs-literal">null</span>, <span class="hljs-number">4</span>);
+<span class="hljs-comment">// 输出的字符串就是 &#x27;&#123;&quot;c&quot;: &quot;3&quot;, &quot;b&quot;: &quot;2&quot;, &quot;a&quot;: &quot;1&quot;&#125;&#x27;</span></code></pre></div>
+
+</li>
+</ol>
+<p>这里只是举了几个简单的例子，要想让这两个方法在工作中发挥出更大的作用， 还需要您自己亲自去使用， 去发掘。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/JS%E5%9F%BA%E7%A1%80/">JS基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2020/12/11/TS%E4%B8%AD%E4%B8%8D%E8%AF%86%E5%88%AB%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD/">
+                        <span class="hidden-mobile">TS中不识别自己封装的类型判断</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "tfWzLdj9wE2gNLPA1dtpSuPH-MdYXbMMI",
+          app_key: "KyAl71WUBIE9RoYtUAysRnnc",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/debouncer.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/blog/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/blog/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+
+</body>
+</html>
