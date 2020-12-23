@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/assert/favicon.ico">
+  <link rel="icon" type="image/png" href="/blog/assert/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="黄沥锋">
+  <meta name="keywords" content="">
+  <title>拖拽对齐参考线的实现 - 前端进击小组</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/blog/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"striving-dev.github.io","root":"/blog/","version":"1.8.6","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 60vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/blog/">&nbsp;<strong>前端进击小组</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="拖拽对齐参考线的实现">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      黄沥锋
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-21 11:43" pubdate>
+        2020年12月21日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      62
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">拖拽对齐参考线的实现</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="拖拽对齐参考线实现"><a href="#拖拽对齐参考线实现" class="headerlink" title="拖拽对齐参考线实现"></a>拖拽对齐参考线实现</h1><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><p> &nbsp;&nbsp;&nbsp;&nbsp;说到拖拽，我们并不陌生，比如我们平常用的拖拽排序；拖拽上传文件；拖拽对齐等…其中就有我今天要说到的拖拽对齐。那么拖拽对齐到底是怎么一回事？我们又该如何实现这个功能呢？</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;首先，我们先来看看拖拽对齐的效果的怎么样的，我们以一个在线画图工具ProcessOn来展示，如下图所示：</p>
+<p><img src="../assert/align-guides/show.gif" srcset="/blog/img/loading.gif" alt="拖拽对齐"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;从上面的动图我们可以很容易地理解这个功能的效果。就是我们在拖拽一个元素的时候，当这个拖拽元素与另外的元素的边界在水平方向或者竖直方向的位置一样时，就在这个方向上画一条对齐线。所以按照着这个思路，我们来模仿着这个效果实现一个我们自己的拖拽对齐参考线的效果吧！</p>
+<h3 id="2-实现步骤"><a href="#2-实现步骤" class="headerlink" title="2. 实现步骤"></a>2. 实现步骤</h3><p>​     如果将这个效果划分为多个步骤，简单来说那么我们可以分为如下的几个步骤：</p>
+<ol>
+<li>拖拽一个DOM元素，让这个DOM元素跟随我们鼠标的位置来移动</li>
+<li> 记录我们要与拖拽元素对比的其他所有元素的边界的位置</li>
+<li> 用这些记录的边界位置和我们拖拽时，拖拽元素的实时的边界位置做对比，如果相等则在该方向上画一条参考线</li>
+<li> 放开鼠标，将拖拽DOM元素放到当前的位置</li>
+</ol>
+<h3 id="3-如何随心所欲拖拽DOM？"><a href="#3-如何随心所欲拖拽DOM？" class="headerlink" title="3. 如何随心所欲拖拽DOM？"></a>3. 如何随心所欲拖拽DOM？</h3><p>​     无论你用vue还是react技术框架，在github或者npm上都能搜到很多优秀的与拖拽相关的包，比如vue框架下的  <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/vue-dragable">vue-dragable</a> 或者 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/vue-draggable-resizable">vue-draggable-resizable</a>等。它们都有很好的拖拽效果，可以通过简单的配置就可以实现拖拽排序，拖拽更改尺寸等功能。但我今天要讲的是基于HTML5的原生的拖拽的一些技巧，以及在平时的拖拽应用场景下我们会遇到什么难题，还有就是我们如何解决这些难题？</p>
+<p>​    首先我们来学习一下拖拽的基本知识，我们可以把拖拽的整个元素由两部分组成。一是拖拽的元素，二是落点的元素。而按拖拽的流程来看，拖拽其实分为了三个部分： 选中  —&gt;  拖动  —&gt; 释放 。</p>
+<p><strong>1. 选中：</strong></p>
+<p>在HTML5标准中，为了使元素可拖动，把draggable属性设置为true。文本、图片和链接是默认可以拖放的，它们的draggable属性自动被设置成了true。</p>
+<p><code>Tip: 图片和链接按住鼠标左键选中，就可以拖放。文本只有在被选中的情况下才能拖放。如果显示设置文本的draggable属性为true，按住鼠标左键也可以直接拖放。</code></p>
+<p>draggable属性：设置元素是否可拖动。<br>语法：</p>
+  <div class="code-wrapper"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">element</span> <span class="hljs-attr">draggable</span>=<span class="hljs-string">&quot;true | false | auto&quot;</span> &gt;</span></code></pre></div>
+
+<ul>
+<li>true: 可以拖动</li>
+<li>false: 禁止拖动</li>
+<li>auto: 跟随浏览器定义是否可以拖动</li>
+</ul>
+<p><strong>2.拖动：</strong></p>
+<p>每一个可拖动的元素，在拖动过程中，都会经历三个过程，<code>拖动开始</code>–&gt;<code>拖动过程中</code>–&gt; <code>拖动结束</code>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">对象</th>
+<th align="left">事件名称</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">被拖动的元素</td>
+<td align="left">dragstart</td>
+<td align="center">在元素开始被拖动时候触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left">drag</td>
+<td align="center">在元素被拖动时反复触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left">dragend</td>
+<td align="center">在拖动操作完成时触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">目的地对象</td>
+<td align="left">dragenter</td>
+<td align="center">当被拖动元素进入目的地元素所占据的屏幕空间时触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left">dragover</td>
+<td align="center">当被拖动元素在目的地元素内时触发</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left">dragleave</td>
+<td align="center">当被拖动元素没有放下就离开目的地元素时触发</td>
+</tr>
+</tbody></table>
+<p><code>注意： dragenter和dragover事件的默认行为是拒绝接受任何被拖放的元素。因此，我们必须阻止浏览器这种默认行为。e.preventDefault();</code></p>
+<p><strong>3. 释放：</strong></p>
+<p>到达目的地之后，释放元素事件</p>
+<table>
+<thead>
+<tr>
+<th align="center">对象</th>
+<th align="left">事件名称</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">目的地对象</td>
+<td align="left">drop</td>
+<td align="center">当被拖动元素在目的地元素里放下时触发，一般需要取消浏览器的默认行为。</td>
+</tr>
+</tbody></table>
+<p>​      以上就是整个拖拽过程相关的API了，那么可能有人要问了，如果在拖拽过程中我们需要存储一些数据进行拖拽过程中的交互，那这个如何呢？那就要用到DataTransfer对象登场了。</p>
+<p><strong>DataTransfer：</strong></p>
+<p>​      DataTransfer是与拖放操作所触发的事件同时派发的对象，它派生于MouseEvent，具有Event与MouseEvent对象的所有功能，并增加了dataTransfer属性。该属性用于保存拖放的数据和交互信息，返回DataTransfer对象。我们可以通过事件对象的<code>event.dataTransfer</code>来获取这个对象，这个对象包含的属性和方法如下图所示：</p>
+<p><img src="../assert/align-guides/data-transfer.png" srcset="/blog/img/loading.gif" alt="datatransfer"></p>
+<p>具体每一项属性或者方法的含义如下所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/types">types</a></td>
+<td align="left">只读属性。它返回一个我们在dragstart事件中设置的拖动数据格式的数组。 格式顺序与拖动操作中包含的数据顺序相同。IE10+、Edge、safari3.1、Firefox3.5+ 和Chrome4以上支持该属性</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/files">files</a></td>
+<td align="left">返回拖动操作中的文件列表。包含一个在数据传输上所有可用的本地文件列表。如果拖动操作不涉及拖动文件，此属性是一个空列表。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/dropEffect">dropEffect</a></td>
+<td align="left">获取当前选定的拖放操作的类型或将操作设置为新类型。它应该始终设置成effectAllowed的可能值之一【none、move、copy、link】。dragover事件处理程序中针对放置目标来设置dropEffect。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/effectAllowed">effectAllowed</a></td>
+<td align="left">指定拖放操作所允许的效果。必须是其中之一【 none, copy, copyLink, copyMove, link, linkMove, move, all, uninitialized】默认为uninitialized 表示允许所有的效果。ondragstart处理程序中设置effectAllowed属性</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/setData">void setData(format, data)</a></td>
+<td align="left">将拖动操作的拖动数据设置为指定的数据和类型。format可以是MIME类型</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/getData">String getData(format)</a></td>
+<td align="left">返回指定格式的数据，format与setData()中一致</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/clearData">void clearData(format)</a></td>
+<td align="left">删除给定类型的拖动操作的数据。如果给定类型的数据不存在，此方法不执行任何操作。如果不给定参数，则删除所有类型的数据。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/setDragImage">void setDragImage(img, xOffset, yOffset)</a></td>
+<td align="left">指定一副图像，当拖动发生时，显示在光标下方。大多数情况下不用设置，因为被拖动的节点被创建成默认图片。x,y参数分别指示图像的水平、垂直偏移量</td>
+</tr>
+</tbody></table>
+<p>​     如果你使用Vue的话完全可以使用Vuex来存储整个拖拽过程你需要的数据，使用React的话也同样可以使用Redux来存储，这样搭配起使用的框架来说也更加优雅一些。搞懂了上面的基础知识，我们就可以愉快的实现拖拽DOM了，But….下面这些问题，你在开发过程中可能也会遇到，举些栗子：</p>
+<p><strong>关于拖拽你可能会遇到的难点：</strong></p>
+<p>​    <strong>1.如何自定义拖拽拖影？</strong></p>
+<p>​        什么叫拖拽拖影呢？其实很好理解，大家肯定也见过，如下图所示：</p>
+<p>​         <img src="../assert/align-guides/drag-shadow.png" srcset="/blog/img/loading.gif" alt="拖拽阴影"></p>
+<p>​     由上面的知识我们可以知道，图片默认都是可拖拽的，当图片被拖拽的时候，浏览器就会依据这个图片产生一个阴影，我们称之为“拖拽阴影”，是不是有一种灵魂出窍的感觉。但有时候我们不想要这种默认行为，我们想自定义自己的拖拽阴影，那么我们该如何去实现呢？</p>
+<p>​     HTML5的拖拽API中为我们提供了这样一个方法叫做setDragImage，可以自定义拖拽过程中的拖影，它的具体用法如下所示：</p>
+<p> <strong>语法：</strong></p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-keyword">void</span> dataTransfer.setDragImage(img, xOffset, yOffset);</code></pre></div>
+
+<p><strong>参数：</strong></p>
+<ul>
+<li><p><em>img |</em> Element</p>
+<p>用于拖曳反馈图像的图像 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element"><code>Element</code></a> 元素。图像通常是一个<image>元素，但也可以是<canvas>或任何其他图像元素。</p>
+</li>
+<li><p><em>xOffset</em></p>
+<p>图片相对于鼠标指针出现的x方向的偏移量</p>
+</li>
+<li><p><em>yOffset</em></p>
+<p>图片相对于鼠标指针出现的y方向的偏移量</p>
+</li>
+</ul>
+<p><strong>使用：</strong></p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-keyword">const</span> img = <span class="hljs-keyword">new</span> Image();
+img.src = dragIcon;
+<span class="hljs-built_in">document</span>.body.appendChild(img); <span class="hljs-comment">// 必须把该元素添加到dom才能显示自定义拖拽阴影</span>
+evt.dataTransfer.setDragImage(img, -<span class="hljs-number">20</span>, <span class="hljs-number">120</span>);</code></pre></div>
+
+<p><strong>注意： 如果插入的dom元素，比如<image>，放入setDragImage前请确保插入dom树中</strong></p>
+<p>  <strong>2. 如果拖拽的时候拖拽元素或者拖拽元素父元素不渲染了，如何保证拖拽正常执行？</strong></p>
+<p>​       有一种情况，当我们拖拽一个dom元素的时候，需要把拖拽面板隐藏，在Vue中我们通过对于这个面板通过v-if 或者 v-show 控制变量进行隐藏，我们拿阿里的imgcook来举个栗子：</p>
+<p>​    <img src="../assert/align-guides/drag-hidden.gif" srcset="/blog/img/loading.gif" alt="拖拽隐藏"></p>
+<p>​    从上面的动图中可以看到，当我们拖拽组件的时候，组件库面板隐藏了，漏出了组件树面板。如果按照我们上面的思路实现这个效果，拖拽的时候把父元素隐藏，那么这个拖拽的结果就是<strong>拖拽被打断</strong>。那么我们应该如何实现这一效果，又能不打断拖拽呢？</p>
+<p>​    换另一个角度想，我们只是想拖拽的时候，让父元素还保持在DOM中渲染即可，即不会被移除DOM树或者不会被display:none；即可。那么我们这么做，制作一个空面板，然后我们把要拖拽的面板通过position: absolute;定位到这个空面板，当拖拽切换面板的时候，空面板隐藏，而我们的拖拽面板不隐藏而是瞬间移除视野之外，拖拽结束再让它回来。</p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-comment">// 拖拽的开始的时候</span>
+ <span class="hljs-function"><span class="hljs-title">dragStart</span>(<span class="hljs-params"></span>)</span>&#123;
+   <span class="hljs-built_in">this</span>.$refs.dragContainer.style = &#123;
+     opacity: <span class="hljs-number">0</span>,
+     left:-1000px
+   &#125;
+ &#125;
+
+<span class="hljs-comment">// 拖拽结束的时候</span>
+ <span class="hljs-function"><span class="hljs-title">dragEnd</span>(<span class="hljs-params"></span>)</span>&#123;
+   <span class="hljs-built_in">this</span>.$refs.dragContainer.style = &#123;
+     opacity: <span class="hljs-number">1</span>,
+     left:80px
+   &#125;
+ &#125;</code></pre></div>
+
+
+
+<p>​     这样以来我们就巧妙地避开了拖拽被打断的情况，但当你以为这个是个好办法的时候，你会发现这样拖拽还是被打断了，为什么呢？因为你在拖拽的时候改变了容器的位置！没错，改变位置同样会打断拖拽！那…到底该如何实现这种拖拽效果呢？ 换另一个角度想，我们是因为拖拽开始的时候改变了样式导致拖拽被打断，那么我们等拖起来再改变样式呢？没错！我们可以把设置样式放在计时器setTimeOut中，等拖拽起来之后我们我们再改变样式，这样一来就可以完美实现该效果了!</p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-comment">// 拖拽的开始的时候</span>
+ <span class="hljs-function"><span class="hljs-title">dragStart</span>(<span class="hljs-params"></span>)</span>&#123;
+   <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">()=&gt;</span>&#123;
+    <span class="hljs-built_in">this</span>.$refs.dragContainer.style = &#123;
+     opacity: <span class="hljs-number">0</span>,
+     left:-1000px
+   &#125;
+   &#125;,<span class="hljs-number">0</span>)
+ &#125;</code></pre></div>
+
+
+
+<h3 id="4-如何记录DOM元素的位置边界？"><a href="#4-如何记录DOM元素的位置边界？" class="headerlink" title="4.如何记录DOM元素的位置边界？"></a>4.如何记录DOM元素的位置边界？</h3><p>​    记录我们要拖拽元素的位置和要做对齐比较的元素的位置，对于实现对齐参考线来说至关重要。Web中有一个方法getBoundingClientRect，这个方法返回元素的大小及其相对于视口的位置，也就是clientX和clientY的这个视口。</p>
+<p>​    <strong>使用：</strong></p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-keyword">const</span> position = dom.getBoundingClientRect();
+<span class="hljs-keyword">const</span> &#123; left = <span class="hljs-number">0</span>, top = <span class="hljs-number">0</span>, right = <span class="hljs-number">0</span>, bottom = <span class="hljs-number">0</span>, width = <span class="hljs-number">0</span>, height = <span class="hljs-number">0</span> &#125; = position;
+<span class="hljs-comment">// left 元素相对于视口左边的距离</span>
+<span class="hljs-comment">// top 元素相对于视口上边的距离</span>
+<span class="hljs-comment">// right 元素相对于视口右边的距离</span>
+<span class="hljs-comment">// bottom 元素相对于视口下边的距离</span>
+<span class="hljs-comment">// width 元素的宽度</span>
+<span class="hljs-comment">// height 元素的高度</span></code></pre></div>
+
+<p><strong>注意： 如果是标准盒子模型，元素的宽或高等于<code>width/height</code> + <code>padding</code> + <code>border-width</code>的总和。如果<code>box-sizing: border-box</code>，元素的的尺寸等于 <code>width/height</code>。</strong></p>
+<p>   这个API可以很方便地让我们记录我们想要监听元素的位置，而我们想要对比监听的元素我们可以给每个元素添加一个ref或者id又或者data-xx 自定义属性等。具体记录监听的元素可以参考如下代码：</p>
+<div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-keyword">const</span> nodes = <span class="hljs-built_in">this</span>.root.querySelectorAll(<span class="hljs-built_in">this</span>.selector);
+<span class="hljs-keyword">if</span> (nodes &amp;&amp; nodes.length === <span class="hljs-number">0</span>) &#123;
+  <span class="hljs-keyword">return</span>;
+&#125;
+nodes.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> &#123;
+  node._leval = <span class="hljs-number">0</span>;
+  node._children = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([]);
+  node._id = node.getAttribute(<span class="hljs-built_in">this</span>.idAttr);
+&#125;);
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; nodes.length; i++) &#123;
+  <span class="hljs-keyword">const</span> position = nodes[i].getBoundingClientRect() || &#123;&#125;;
+  <span class="hljs-keyword">const</span> &#123; width = <span class="hljs-number">0</span>, height = <span class="hljs-number">0</span>, top = <span class="hljs-number">0</span>, bottom = <span class="hljs-number">0</span>, left = <span class="hljs-number">0</span>, right = <span class="hljs-number">0</span> &#125; = position;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = i + <span class="hljs-number">1</span>; j &lt; nodes.length; j++) &#123;
+    <span class="hljs-keyword">if</span> (nodes[i].contains(nodes[j])) &#123;
+      nodes[j]._leval += <span class="hljs-number">1</span>; <span class="hljs-comment">// 记录元素的层级</span>
+      nodes[j]._parentId = nodes[i]._id; <span class="hljs-comment">// 记录父节点</span>
+      nodes[i]._children = nodes[i]._children.add(nodes[j]._id); <span class="hljs-comment">// 记录元素的子节点们</span>
+    &#125;
+  &#125;
+  <span class="hljs-built_in">this</span>.listeners.push(&#123;
+    id: nodes[i]._id,
+    width,
+    height,
+    top,
+    bottom,
+    left: <span class="hljs-built_in">Math</span>.round(left),
+    right: <span class="hljs-built_in">Math</span>.round(right),
+    leval: nodes[i]._leval,
+    parentId: nodes[i]._parentId,
+    children: nodes[i]._children
+  &#125;);
+&#125;</code></pre></div>
+
+<p>   从上可以看出，如果选择器通过querySelectorAll来查找，是无法区分查找结果的具体父子关系的，而父子元素对于我们的拖拽对齐很有用，比如我们再拖拽一个元素，这个元素又包含着一些子元素，我们拖拽这个元素的时候，我们肯定是不希望它与内部的子元素还做对比，我们画的参考线是针对于其外部的其他元素做对比。因此我们可以通过 <code>dom1.contains(dom2)</code>来判断和记录它们的父子关系。然后我们在页面监听元素更新的时候，再去重新收集依赖最新的位置信息即可。</p>
+<h3 id="5-如何实现靠近吸附？"><a href="#5-如何实现靠近吸附？" class="headerlink" title="5. 如何实现靠近吸附？"></a>5. 如何实现靠近吸附？</h3><p>​        由于我们在拖拽的时候，并非是1像素1像素地去移动地，而两个元素的对齐又是在一瞬间的，只有在某一边的位置完全相等的时候，我们才鞥称之为对齐，所以就有了靠近吸附的功能，它能帮助我们更容易地实现辅助对齐的效果。具体效果参考ProcessOn如下图所示：</p>
+<p>  <img src="../assert/align-guides/show-align-line.gif" srcset="/blog/img/loading.gif"></p>
+<p>可以看到当拖拽元素接近对齐元素的时候，有一个吸附的效果，然后在吸附的地方画了一个参考线，那么我们应该如何实现这种功能呢？</p>
+<p>我们同样可以将这个功能拆解一下，大概满足如下的步骤就能实现：</p>
+<ol>
+<li>将方向分为x和y，且x和y方向的吸附是独立的</li>
+<li>同一个方向上的同一时间最多只能有一个吸附效果</li>
+<li>吸附效果应该出现在我们移动的方向上，比如向左移动的时候，吸附效果只能出现在x方向的左边的其他元素</li>
+<li>当吸附发生后，应该有个鼠标安全距离，在这个安全距离内，鼠标的移动不会改变吸附效果，当大于这个距离的时候，才让拖拽元素跟着鼠标移动。不然会出现闪动或者“拔不出来”的情况。</li>
+</ol>
+<h3 id="6-如何画对齐参考线？"><a href="#6-如何画对齐参考线？" class="headerlink" title="6.如何画对齐参考线？"></a>6.如何画对齐参考线？</h3><p>   上面我们有了拖拽，也有了位置关系，那当拖拽元素与对比元素的位置一样的时候，如何画出一条对齐参考线呢？ 我们可以通过<canvas>元素来实现这一功能。</p>
+<p>   要实现canvas绘图，首先我们要创建canvas然后将canvas元素绝对定位放到拖拽对齐展示区域的上面，那么另一个难题来了，canvas元素也是dom，也就是说它也会干扰鼠标事件，其中就包含着我们的拖拽事件。如果我们的落点的event.target为canvas了，那肯定不是我们想要的结果。所以如何让canvas执行画图功能，但又要让它“透明”不干扰鼠标事件呢？其实css中有个属性，叫做pointer-events，它代表着元素如何处理鼠标事件。当我们如下设置的时候，它就不会不会捕捉一切的鼠标事件，相当于存在但“透明”！</p>
+   <div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-tag">pointer-event</span><span class="hljs-selector-pseudo">:none</span>;</code></pre></div>
+
+<p>   canvas元素有了，然后我们再dragMove的时候可以实时地将拖拽元素和上面记录的对比监听者的边界做对比，如果相等就画一条线，下次执行dragMove的时候清除画布。伪代码如下：</p>
+   <div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-comment">// 生成canvas定位到展示区域上，并设置pointer-events:none;</span>
+<span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&quot;canvas&quot;</span>);
+<span class="hljs-keyword">const</span> &#123; width = <span class="hljs-number">0</span>, height = <span class="hljs-number">0</span> &#125; = <span class="hljs-built_in">this</span>.rootPosition;
+canvas.width = width;
+canvas.height = height;
+canvas.style=<span class="hljs-string">`position:absolute;pointer-events:none;left:0;top:0;`</span>
+<span class="hljs-built_in">this</span>.root.appendChild(canvas);
+
+<span class="hljs-comment">// 相等时画线</span>
+<span class="hljs-keyword">const</span> ctx  = canvas.getContext(<span class="hljs-string">&quot;2d&quot;</span>);
+ctx.strokeStyle = <span class="hljs-built_in">this</span>.defaultCanvasLineColor;
+ctx.lineWidth = <span class="hljs-built_in">this</span>.defaultCanvasLineWidth;
+<span class="hljs-keyword">const</span> &#123; left = <span class="hljs-number">0</span>, width = <span class="hljs-number">0</span>, height = <span class="hljs-number">0</span>, top = <span class="hljs-number">0</span> &#125; = <span class="hljs-built_in">this</span>.rootPosition;
+ctx.beginPath();
+ctx.moveTo(x - left, <span class="hljs-number">0</span>);  <span class="hljs-comment">// 注意：此时的移动的位置相对于根元素，也就是我们展示区域</span>
+ctx.lineTo(x - left, height);
+ctx.stroke();
+
+<span class="hljs-comment">// 清除画布</span>
+<span class="hljs-keyword">const</span> &#123; width = <span class="hljs-number">0</span>, height = <span class="hljs-number">0</span> &#125; = <span class="hljs-built_in">this</span>.rootPosition;
+ctx.clearRect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, width, height);</code></pre></div>
+
+
+
+<h3 id="7-如何将元素放到拖拽的位置？"><a href="#7-如何将元素放到拖拽的位置？" class="headerlink" title="7. 如何将元素放到拖拽的位置？"></a>7. 如何将元素放到拖拽的位置？</h3><p>​    知道了拖拽的时候位置，我们可以在dragEnd的时候将元素的样式的位置改为落点位置，这样就可以了，具体根据业务不同再细微调整。</p>
+<p>   <strong>注意：  如果落点有父子关系的话，落点位置要相对于父节点的位移，而非相对于视口！</strong></p>
+<h3 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h3><p>   拖拽对齐参考线是一项很常见功能，也是很耗费性能的操作，所以应保持在拖拽过程中尽可能地节省开销。 比如我们在监听dragMove的事件的时候，如果我们的鼠标位置在原地不动，它还是会一直执行，我们可以存储上一次的鼠标位置和这次的对比，如果完全一样就没必要执行里面的逻辑，这样可以节省不必要的开销。另一方面就是我们可以通过对dragMove函数进行节流处理，降低单位时间执行的次数，这样也能大大提高性能。总之，拖拽是门手艺，学会需要勇气，一起来试试吧！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/Web%E6%8A%80%E5%B7%A7/">Web技巧</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2020/12/21/JSON.stringify%E5%92%8CJSON.parse/">
+                        <span class="hidden-mobile">JSON.stringify和JSON.parse</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "tfWzLdj9wE2gNLPA1dtpSuPH-MdYXbMMI",
+          app_key: "KyAl71WUBIE9RoYtUAysRnnc",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/debouncer.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/blog/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/blog/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+
+</body>
+</html>
