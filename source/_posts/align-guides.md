@@ -3,7 +3,7 @@ title: 拖拽对齐参考线的实现
 date: 2020-12-21 11:43:41
 tags: Web技巧
 author: 黄沥锋
-index_img: assert/align-guides/index.png
+index_img: assert/align-guides.png
 ---
 
 # 拖拽对齐参考线实现
