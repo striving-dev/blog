@@ -14,7 +14,7 @@ index_img: assert/align-guides/index.png
 
 &nbsp;&nbsp;&nbsp;&nbsp;首先，我们先来看看拖拽对齐的效果的怎么样的，我们以一个在线画图工具ProcessOn来展示，如下图所示：
 
-![拖拽对齐](../assert/align-guides/show.gif)
+![拖拽对齐](show.gif)
 
 &nbsp;&nbsp;&nbsp;&nbsp;从上面的动图我们可以很容易地理解这个功能的效果。就是我们在拖拽一个元素的时候，当这个拖拽元素与另外的元素的边界在水平方向或者竖直方向的位置一样时，就在这个方向上画一条对齐线。所以按照着这个思路，我们来模仿着这个效果实现一个我们自己的拖拽对齐参考线的效果吧！
 
@@ -90,7 +90,7 @@ draggable属性：设置元素是否可拖动。
 
 ​      DataTransfer是与拖放操作所触发的事件同时派发的对象，它派生于MouseEvent，具有Event与MouseEvent对象的所有功能，并增加了dataTransfer属性。该属性用于保存拖放的数据和交互信息，返回DataTransfer对象。我们可以通过事件对象的`event.dataTransfer`来获取这个对象，这个对象包含的属性和方法如下图所示：
 
-![datatransfer](../assert/align-guides/data-transfer.png)
+![datatransfer](data-transfer.png)
 
 具体每一项属性或者方法的含义如下所示：
 
@@ -118,7 +118,7 @@ draggable属性：设置元素是否可拖动。
 
 ​        什么叫拖拽拖影呢？其实很好理解，大家肯定也见过，如下图所示：
 
-​         ![拖拽阴影](../assert/align-guides/drag-shadow.png)
+​         ![拖拽阴影](drag-shadow.png)
 
 ​     由上面的知识我们可以知道，图片默认都是可拖拽的，当图片被拖拽的时候，浏览器就会依据这个图片产生一个阴影，我们称之为“拖拽阴影”，是不是有一种灵魂出窍的感觉。但有时候我们不想要这种默认行为，我们想自定义自己的拖拽阴影，那么我们该如何去实现呢？
 
@@ -134,7 +134,7 @@ void dataTransfer.setDragImage(img, xOffset, yOffset);
 
 - *img |* Element
 
-  用于拖曳反馈图像的图像 [`Element`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element) 元素。图像通常是一个<image>元素，但也可以是<canvas>或任何其他图像元素。
+  用于拖曳反馈图像的图像 [`Element`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element) 元素。图像通常是一个`<image>`元素，但也可以是`<canvas>`或任何其他图像元素。
 
 - *xOffset*
 
@@ -161,7 +161,7 @@ evt.dataTransfer.setDragImage(img, -20, 120);
 
 ​       有一种情况，当我们拖拽一个dom元素的时候，需要把拖拽面板隐藏，在Vue中我们通过对于这个面板通过v-if 或者 v-show 控制变量进行隐藏，我们拿阿里的imgcook来举个栗子：
 
-​    ![拖拽隐藏](../assert/align-guides/drag-hidden.gif)
+​    ![拖拽隐藏](drag-hidden.gif)
 
 ​    从上面的动图中可以看到，当我们拖拽组件的时候，组件库面板隐藏了，漏出了组件树面板。如果按照我们上面的思路实现这个效果，拖拽的时候把父元素隐藏，那么这个拖拽的结果就是**拖拽被打断**。那么我们应该如何实现这一效果，又能不打断拖拽呢？
 
@@ -265,7 +265,7 @@ const { left = 0, top = 0, right = 0, bottom = 0, width = 0, height = 0 } = posi
 
 ​		由于我们在拖拽的时候，并非是1像素1像素地去移动地，而两个元素的对齐又是在一瞬间的，只有在某一边的位置完全相等的时候，我们才鞥称之为对齐，所以就有了靠近吸附的功能，它能帮助我们更容易地实现辅助对齐的效果。具体效果参考ProcessOn如下图所示：
 
-  ![](../assert/align-guides/show-align-line.gif)
+  ![](show-align-line.gif)
 
 可以看到当拖拽元素接近对齐元素的时候，有一个吸附的效果，然后在吸附的地方画了一个参考线，那么我们应该如何实现这种功能呢？
 
@@ -278,7 +278,7 @@ const { left = 0, top = 0, right = 0, bottom = 0, width = 0, height = 0 } = posi
 
 ### 6.如何画对齐参考线？
 
-   上面我们有了拖拽，也有了位置关系，那当拖拽元素与对比元素的位置一样的时候，如何画出一条对齐参考线呢？ 我们可以通过<canvas>元素来实现这一功能。
+   上面我们有了拖拽，也有了位置关系，那当拖拽元素与对比元素的位置一样的时候，如何画出一条对齐参考线呢？ 我们可以通过`<canvas>`元素来实现这一功能。
 
    要实现canvas绘图，首先我们要创建canvas然后将canvas元素绝对定位放到拖拽对齐展示区域的上面，那么另一个难题来了，canvas元素也是dom，也就是说它也会干扰鼠标事件，其中就包含着我们的拖拽事件。如果我们的落点的event.target为canvas了，那肯定不是我们想要的结果。所以如何让canvas执行画图功能，但又要让它“透明”不干扰鼠标事件呢？其实css中有个属性，叫做pointer-events，它代表着元素如何处理鼠标事件。当我们如下设置的时候，它就不会不会捕捉一切的鼠标事件，相当于存在但“透明”！
 
